@@ -14,11 +14,4 @@ public class TaskListDto {
     @NonNull
     private String name;
 
-    public TaskListDto convertTaskListEntityToTaskListDto(TaskListEntity taskList) {
-        return TaskListDto.builder()
-                .id(taskList.getId())
-                .name(taskList.getName())
-                .build();
-    }
-
 }

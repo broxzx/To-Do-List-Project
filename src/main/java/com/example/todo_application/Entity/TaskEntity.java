@@ -1,5 +1,6 @@
 package com.example.todo_application.Entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -15,7 +16,7 @@ import java.time.Instant;
 @Builder
 public class TaskEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(unique = true, nullable = false)
@@ -23,6 +24,7 @@ public class TaskEntity {
 
     private String description;
 
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "UTC")
     private Instant dueDate;
 
     @Column(nullable = false)
@@ -32,10 +34,4 @@ public class TaskEntity {
     @JoinColumn(name = "task_id")
     private TaskListEntity taskListEntity;
 
-    public TaskEntity(String title, String description, Instant dueDate, Boolean isDone) {
-        this.title = title;
-        this.description = description;
-        this.dueDate = dueDate;
-        this.isDone = isDone;
-    }
 }

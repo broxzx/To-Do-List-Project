@@ -7,6 +7,8 @@ import com.example.todo_application.Factory.TaskDtoFactory;
 import com.example.todo_application.Factory.TaskListDtoFactory;
 import com.example.todo_application.Repository.TaskListRepository;
 import com.example.todo_application.dto.TaskListDto;
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,7 +19,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/task-list")
+@RequestMapping("/api")
+@RequiredArgsConstructor
+@Transactional
 public class TaskListController {
     private final TaskListRepository taskListRepository;
     private final TaskListDtoFactory taskListDtoFactory;
@@ -28,11 +32,6 @@ public class TaskListController {
     private static final String UPDATE_TASK_LIST_BY_ID = "/{id}";
     private static final String DELETE_TASK_LIST_BY_ID = "/{id}";
 
-    @Autowired
-    public TaskListController(TaskListRepository taskListRepository, TaskListDtoFactory taskListDtoFactory) {
-        this.taskListRepository = taskListRepository;
-        this.taskListDtoFactory = taskListDtoFactory;
-    }
 
     @GetMapping(GET_TASKS_LIST)
     public List<TaskListDto> getTasksList() {
@@ -53,16 +52,12 @@ public class TaskListController {
 
     @PostMapping(CREATE_TASK_LIST)
     public ResponseEntity<String> createTaskList(@RequestBody TaskListEntity taskList) {
-        if (taskListRepository.findById(taskList.getId()).isPresent()) {
-            throw new TaskListWithRecourseExists(String.format("Task list with id %s already exists", taskList.getId()));
-        }
-
         if (taskListRepository.existsByName(taskList.getName())) {
             throw new TaskListWithRecourseExists(String.format("Task list with name %s already exists", taskList.getName()));
         }
 
         TaskListEntity savedTaskListEntity = taskListRepository.save(taskList);
-        return ResponseEntity.status(HttpStatus.CREATED).body(String.format("Task list with id %s was created", taskList.getId()));
+        return ResponseEntity.status(HttpStatus.CREATED).body(String.format("Task list with id %s was created", savedTaskListEntity.getId()));
     }
 
     @PutMapping(UPDATE_TASK_LIST_BY_ID)
