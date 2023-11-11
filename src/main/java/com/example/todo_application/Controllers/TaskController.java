@@ -12,6 +12,7 @@ import com.example.todo_application.Repository.TaskRepository;
 import com.example.todo_application.dto.TaskDto;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,6 +25,7 @@ import java.util.stream.Collectors;
 @RequestMapping
 @Transactional
 @RequiredArgsConstructor
+@Slf4j
 public class TaskController {
 
     private final TaskRepository taskRepository;
@@ -44,6 +46,8 @@ public class TaskController {
             throw new TaskListNotFound("Task list does not contain any tasks");
         }
 
+        log.info("List Tasks have been obtained");
+
         return taskList
                 .getTasks()
                 .stream()
@@ -60,6 +64,8 @@ public class TaskController {
                 .stream()
                 .filter(anotherTask -> anotherTask.getId().equals(taskId))
                 .findFirst();
+
+        log.info("Task with id {} was obtained", taskId);
 
         return task
                 .map(taskEntity ->
@@ -80,12 +86,15 @@ public class TaskController {
                 .anyMatch(anotherTask -> anotherTask.getTitle().equals(task.getTitle()));
 
         if (titleExists) {
+            log.error("Task with {} title already exists", task.getTitle());
             throw new TaskWithRecourseExists(String.format("Task with %s title already exists", task.getTitle()));
         }
 
         taskList.addTaskToTaskList(task);
 
-        taskRepository.save(task);
+        taskRepository.saveAndFlush(task);
+
+        log.info("Task has been created successfully");
 
         return ResponseEntity.status(HttpStatus.CREATED).body(String.format("Task with id %s was successfully created",task.getId()));
 
@@ -94,6 +103,7 @@ public class TaskController {
     @PutMapping(UPDATE_TASK)
     public ResponseEntity<TaskDto> updateTask(@PathVariable Long taskListId, @PathVariable Long taskId, @RequestBody TaskEntity task) {
         if (task.getTitle().trim().isEmpty()) {
+            log.error("Task title cannot be empty");
             throw new BadRequestException("Task title cannot be empty");
         }
 
@@ -115,30 +125,25 @@ public class TaskController {
         taskEntity.setIsDone(task.getIsDone());
 
         taskList.updateTaskToTaskList(taskEntity);
-        taskRepository.save(taskEntity);
+        taskRepository.saveAndFlush(taskEntity);
+
+        log.info("Task has been updated successfully");
 
         return ResponseEntity.ok(taskDtoFactory.makeTaskDto(taskEntity));
     }
 
     @DeleteMapping(DELETE_TASK)
     public void deleteTask(@PathVariable Long taskId) {
-//        TaskListEntity taskList = controllerHelper.getTaskListOrThrowException(taskListId);
-//
-//        TaskEntity taskEntity = taskList.getTasks()
-//                .stream()
-//                .filter(anotherTask -> anotherTask.getId().equals(taskId))
-//                .findFirst()
-//                .orElseThrow(
-//                        () -> new TaskNotFoundException(String.format("Task with id %s was not found", taskId))
-//                );
         boolean exists = taskRepository.existsById(taskId);
 
         if (exists) {
+            log.error("Task does with id {} not exist", taskId);
             taskRepository.deleteById(taskId);
 
         } else {
+            log.info("Task has been deleted");
             throw new TaskNotFoundException("task was not found");
         }
-//        taskList.deleteTaskFromTaskList(taskEntity);
     }
 }
+
