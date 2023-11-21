@@ -42,6 +42,10 @@ public class TaskController {
     public List<TaskDto> getAllTasks(@PathVariable Long taskId) {
         TaskListEntity taskList = controllerHelper.getTaskListOrThrowException(taskId);
 
+        if (taskList == null) {
+            throw new TaskListNotFound("Task list not found");
+        }
+
         if (taskList.getTasks().isEmpty()) {
             throw new TaskListNotFound("Task list does not contain any tasks");
         }
