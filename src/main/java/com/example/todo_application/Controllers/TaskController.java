@@ -61,7 +61,7 @@ public class TaskController {
 
 
     @GetMapping(GET_TASK_BY_ID)
-    public ResponseEntity<TaskDto> getTaskDtoById(@PathVariable Long taskListId, @PathVariable Long taskId) {
+    public ResponseEntity<TaskDto> getTaskById(@PathVariable Long taskListId, @PathVariable Long taskId) {
         TaskListEntity taskList = controllerHelper.getTaskListOrThrowException(taskListId);
 
         Optional<TaskEntity> task = taskList.getTasks()
