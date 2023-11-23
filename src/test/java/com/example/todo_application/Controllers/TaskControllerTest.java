@@ -66,6 +66,7 @@ public class TaskControllerTest {
     }
 
     @Test
+    @DisplayName("GET /api/{taskListId}/task/{taskId} returns tasks with appropriate id that TaskListEntity contains")
     void testGetTaskById() {
         Long taskListId = 1L;
         Long taskId = 2L;
@@ -87,6 +88,7 @@ public class TaskControllerTest {
     }
 
     @Test
+    @DisplayName("POST /api/{taskListId}/task/ creates new task in appropriate Task List")
     void testCreateTask() {
         Long taskListId = 1L;
         Long taskId = 1L;
@@ -109,6 +111,7 @@ public class TaskControllerTest {
     }
 
     @Test
+    @DisplayName("PUT /api/{taskListId}/task/{taskId} updates existed task with id {taskId}")
     void testUpdateTask() {
         Long taskListId = 1L;
         Long taskId = 1L;
@@ -141,6 +144,7 @@ public class TaskControllerTest {
     }
 
     @Test
+    @DisplayName("DELETE /api/task/{taskId} updates existed task with id {taskId}")
     void testDeleteTask() {
         Long taskId = 1L;
 

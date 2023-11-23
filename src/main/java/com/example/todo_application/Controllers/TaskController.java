@@ -33,10 +33,10 @@ public class TaskController {
     private final TaskDtoFactory taskDtoFactory;
 
     private static final String GET_ALL_TASKS = "/api/{taskId}/task/";
-    private static final String GET_TASK_BY_ID = "api/{taskListId}/task/{taskId}";
+    private static final String GET_TASK_BY_ID = "/api/{taskListId}/task/{taskId}";
     private static final String CREATE_TASK = "/api/{taskListId}/task/";
     private static final String UPDATE_TASK = "/api/{taskListId}/task/{taskId}";
-    private static final String DELETE_TASK = "api/task/{taskId}";
+    private static final String DELETE_TASK = "/api/task/{taskId}";
 
     @GetMapping(GET_ALL_TASKS)
     public List<TaskDto> getAllTasks(@PathVariable Long taskId) {
@@ -141,12 +141,11 @@ public class TaskController {
         boolean exists = taskRepository.existsById(taskId);
 
         if (exists) {
-            log.error("Task does with id {} not exist", taskId);
             taskRepository.deleteById(taskId);
-
+            log.info(String.format("Task with id %s was deleted successfully", taskId));
         } else {
-            log.info("Task has been deleted");
-            throw new TaskNotFoundException("task was not found");
+            log.error(String.format("Task with id %s was not found", taskId));
+            throw new TaskNotFoundException(String.format("Task with id %s was not found", taskId));
         }
     }
 }
