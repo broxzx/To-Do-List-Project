@@ -7,6 +7,8 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.LinkedList;
+
 @Component
 @Transactional
 @RequiredArgsConstructor
