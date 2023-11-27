@@ -1,17 +1,15 @@
 package com.example.todo_application.Entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+
+import java.util.List;
 
 @Entity
 @Table(name = "user_entity")
 @Getter
 @Setter
 @AllArgsConstructor
-@NoArgsConstructor
 public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -28,4 +26,15 @@ public class UserEntity {
 
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    @OneToMany(mappedBy = "createdBy", cascade = CascadeType.ALL)
+    private List<TaskEntity> createdTasks;
+
+    @OneToMany(mappedBy = "createdBy", cascade = CascadeType.ALL)
+    private List<TaskListEntity> createdTaskLists;
+
+
+    public UserEntity() {
+        this.role = Role.USER;
+    }
 }

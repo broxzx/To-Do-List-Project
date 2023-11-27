@@ -22,8 +22,12 @@ public class TaskListEntity {
     @Column(unique = true, nullable = false)
     private String name;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "taskListEntity")
+    @OneToMany(mappedBy = "taskListEntity", cascade = CascadeType.ALL)
     private List<TaskEntity> tasks;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "created_by")
+    private UserEntity createdBy;
 
     public void addTaskToTaskList(TaskEntity taskEntity) {
         tasks.add(taskEntity);
@@ -40,14 +44,5 @@ public class TaskListEntity {
                     taskEntity.setDueDate(task.getDueDate());
                     taskEntity.setIsDone(task.getIsDone());
                 });
-    }
-
-    public void deleteTaskFromTaskList(TaskEntity task) {
-         TaskEntity taskEntity = tasks.stream()
-                .filter(anotherTask -> anotherTask.getId().equals(task.getId()))
-                .findFirst()
-                .orElseThrow(
-                        () -> new TaskNotFoundException(String.format("Task with %s id was not found", task.getId()))
-                );
     }
 }
