@@ -11,15 +11,16 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api")
 @RequiredArgsConstructor
 @Transactional
+@RequestMapping("/api")
 @Slf4j
 public class TaskListController {
     private final TaskListRepository taskListRepository;
@@ -32,6 +33,7 @@ public class TaskListController {
     private static final String DELETE_TASK_LIST_BY_ID = "/{id}";
 
 
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @GetMapping(GET_TASKS_LIST)
     public List<TaskListDto> getTasksList() {
 
@@ -43,6 +45,8 @@ public class TaskListController {
                 .collect(Collectors.toList());
     }
 
+
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @GetMapping(GET_TASK_LIST_BY_ID)
     public TaskListDto getTaskById(@PathVariable Long id) {
 
@@ -55,6 +59,7 @@ public class TaskListController {
                 );
     }
 
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @PostMapping(CREATE_TASK_LIST)
     public ResponseEntity<String> createTaskList(@RequestBody TaskListEntity taskList) {
         if (taskListRepository.existsByName(taskList.getName())) {
@@ -68,17 +73,18 @@ public class TaskListController {
         return ResponseEntity.status(HttpStatus.CREATED).body(String.format("Task list with id %s was created", savedTaskListEntity.getId()));
     }
 
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @PutMapping(UPDATE_TASK_LIST_BY_ID)
     public ResponseEntity<TaskListDto> updateTaskList(@PathVariable Long id, @RequestBody TaskListEntity taskList) {
-        TaskListEntity foundTaskListEntity = taskListRepository.findById(id)
+        TaskListEntity findTaskListEntity = taskListRepository.findById(id)
                 .orElseThrow(
                         () -> new TaskListNotFound(String.format("Task list with id %s was not found", id))
                 );
 
-        foundTaskListEntity.setName(taskList.getName());
-        foundTaskListEntity.setTasks(taskList.getTasks());
+        findTaskListEntity.setName(taskList.getName());
+        findTaskListEntity.setTasks(taskList.getTasks());
 
-        TaskListEntity updatedTaskList = taskListRepository.saveAndFlush(foundTaskListEntity);
+        TaskListEntity updatedTaskList = taskListRepository.saveAndFlush(findTaskListEntity);
         TaskListDto taskListDto = taskListDtoFactory.makeListDto(updatedTaskList);
 
         log.info("Task with id {} has been updated", id);
@@ -86,6 +92,7 @@ public class TaskListController {
         return ResponseEntity.ok(taskListDto);
     }
 
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @DeleteMapping(DELETE_TASK_LIST_BY_ID)
     public ResponseEntity<String> deleteTaskListById(@PathVariable Long id) {
         if (taskListRepository.findById(id).isEmpty()) {

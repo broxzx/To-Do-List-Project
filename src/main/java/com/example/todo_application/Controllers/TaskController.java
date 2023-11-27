@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -38,6 +39,7 @@ public class TaskController {
     private static final String UPDATE_TASK = "/api/{taskListId}/task/{taskId}";
     private static final String DELETE_TASK = "/api/task/{taskId}";
 
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @GetMapping(GET_ALL_TASKS)
     public List<TaskDto> getAllTasks(@PathVariable Long taskId) {
         TaskListEntity taskList = controllerHelper.getTaskListOrThrowException(taskId);
@@ -60,6 +62,7 @@ public class TaskController {
     }
 
 
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @GetMapping(GET_TASK_BY_ID)
     public ResponseEntity<TaskDto> getTaskDtoById(@PathVariable Long taskListId, @PathVariable Long taskId) {
         TaskListEntity taskList = controllerHelper.getTaskListOrThrowException(taskListId);
@@ -82,6 +85,7 @@ public class TaskController {
     }
 
     @PostMapping(CREATE_TASK)
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<String> createTask(@PathVariable Long taskListId, @RequestBody TaskEntity task) {
         TaskListEntity taskList = controllerHelper.getTaskListOrThrowException(taskListId);
 
@@ -104,6 +108,7 @@ public class TaskController {
 
     }
 
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @PutMapping(UPDATE_TASK)
     public ResponseEntity<TaskDto> updateTask(@PathVariable Long taskListId, @PathVariable Long taskId, @RequestBody TaskEntity task) {
         if (task.getTitle().trim().isEmpty()) {
@@ -136,6 +141,7 @@ public class TaskController {
         return ResponseEntity.ok(taskDtoFactory.makeTaskDto(taskEntity));
     }
 
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @DeleteMapping(DELETE_TASK)
     public void deleteTask(@PathVariable Long taskId) {
         boolean exists = taskRepository.existsById(taskId);

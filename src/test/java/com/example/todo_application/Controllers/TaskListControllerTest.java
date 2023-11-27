@@ -39,7 +39,7 @@ public class TaskListControllerTest {
         mockMvc.perform(get("/api/"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andReturn();
+                 .andReturn();
     }
 
     @Test
