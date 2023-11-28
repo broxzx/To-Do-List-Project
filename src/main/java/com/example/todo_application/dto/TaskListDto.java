@@ -13,4 +13,6 @@ public class TaskListDto {
     @NonNull
     private String name;
 
+    @NonNull
+    private String createdBy;
 }

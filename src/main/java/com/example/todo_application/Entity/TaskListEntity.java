@@ -11,7 +11,6 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
-@ToString
 @Builder
 public class TaskListEntity {
     @Id
@@ -24,7 +23,7 @@ public class TaskListEntity {
     @OneToMany(mappedBy = "taskListEntity", cascade = CascadeType.REMOVE)
     private List<TaskEntity> tasks;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne()
     @JoinColumn(name = "created_by")
     private UserEntity createdBy;
 
@@ -43,5 +42,15 @@ public class TaskListEntity {
                     taskEntity.setDueDate(task.getDueDate());
                     taskEntity.setIsDone(task.getIsDone());
                 });
+    }
+
+    @Override
+    public String toString() {
+        return "TaskListEntity{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", tasks=" + tasks +
+                ", createdBy=" + createdBy +
+                '}';
     }
 }

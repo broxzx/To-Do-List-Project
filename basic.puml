@@ -1,26 +1,41 @@
 @startuml
 
-class Task {
-  -id: Long
-  -title: String
-  -description: String
-  -dueDate: Date
-  -isDone: boolean
-  +Task(title: String, description: String, dueDate: Date)
-  +updateTitle(newTitle: String): void
-  +updateDescription(newDescription: String): void
-  +setDueDate(newDueDate: Date): void
-  +markAsDone(): void
+enum Role {
+    USER,
+    ADMIN
 }
 
-class TaskList {
-  -id: Long
-  -name: String
-  +addTask(task: Task): void
-  +removeTask(task: Task): void
-  +getTasks(): List<Task>
+class TaskEntity {
+    + id: Long
+    + title: String
+    + description: String
+    + dueDate: Instant
+    + isDone: Boolean
+    + taskListEntity: TaskListEntity
+    + createdBy: UserEntity
 }
 
-TaskList "1" -- "*" Task : contains 0..*
+class TaskListEntity {
+    + id: Long
+    + name: String
+    + tasks: List<TaskEntity>
+    + createdBy: UserEntity
+    {method} + addTaskToTaskList(taskEntity: TaskEntity): void
+    {method} + updateTaskToTaskList(task: TaskEntity): void
+}
+
+class UserEntity {
+    + id: Long
+    + username: String
+    + password: String
+    + email: String
+    + role: Role
+    + createdTasks: List<TaskEntity>
+    + createdTaskLists: List<TaskListEntity>
+}
+
+TaskEntity -> TaskListEntity : taskListEntity
+TaskEntity -> UserEntity : createdBy
+TaskListEntity --> UserEntity : createdBy
 
 @enduml

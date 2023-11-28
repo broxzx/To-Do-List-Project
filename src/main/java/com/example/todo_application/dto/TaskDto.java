@@ -25,4 +25,6 @@ public class TaskDto {
     @NonNull
     private Boolean isDone;
 
+    @NonNull
+    private String createdBy;
 }

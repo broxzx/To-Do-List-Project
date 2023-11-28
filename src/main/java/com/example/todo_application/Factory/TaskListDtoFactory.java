@@ -11,6 +11,7 @@ public class TaskListDtoFactory {
         return TaskListDto.builder()
                 .id(taskList.getId())
                 .name(taskList.getName())
+                .createdBy(taskList.getCreatedBy().getUsername())
                 .build();
     }
 }

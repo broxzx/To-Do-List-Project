@@ -10,6 +10,7 @@ import java.util.List;
 @Getter
 @Setter
 @AllArgsConstructor
+@Builder
 public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -36,5 +37,18 @@ public class UserEntity {
 
     public UserEntity() {
         this.role = Role.USER;
+    }
+
+    @Override
+    public String toString() {
+        return "UserEntity{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
+                ", role=" + role +
+                ", createdTasks=" + createdTasks +
+                ", createdTaskLists=" + createdTaskLists +
+                '}';
     }
 }

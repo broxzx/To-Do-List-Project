@@ -14,6 +14,7 @@ public class TaskDtoFactory {
                 .description(task.getDescription())
                 .dueDate(task.getDueDate())
                 .isDone(task.getIsDone())
+                .createdBy(task.getCreatedBy().getUsername())
                 .build();
     }
 }
