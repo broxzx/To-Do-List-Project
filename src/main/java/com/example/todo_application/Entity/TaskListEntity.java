@@ -1,6 +1,5 @@
 package com.example.todo_application.Entity;
 
-import com.example.todo_application.Exception.TaskNotFoundException;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -22,7 +21,7 @@ public class TaskListEntity {
     @Column(unique = true, nullable = false)
     private String name;
 
-    @OneToMany(mappedBy = "taskListEntity", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "taskListEntity", cascade = CascadeType.REMOVE)
     private List<TaskEntity> tasks;
 
     @ManyToOne(cascade = CascadeType.ALL)

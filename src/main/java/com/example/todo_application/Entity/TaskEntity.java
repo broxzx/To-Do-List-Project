@@ -30,11 +30,11 @@ public class TaskEntity {
     @Column(nullable = false)
     private Boolean isDone;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "task_id")
     private TaskListEntity taskListEntity;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "created_by")
     private UserEntity createdBy;
 

@@ -1,7 +1,6 @@
 package com.example.todo_application.Controllers.helper;
 
 import com.example.todo_application.Entity.UserEntity;
-import com.example.todo_application.Repository.UserRepository;
 import com.example.todo_application.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;

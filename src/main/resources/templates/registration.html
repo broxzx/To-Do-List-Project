@@ -6,8 +6,8 @@
 </head>
 <body>
 <form th:action="@{/registration}" method="post" th:object="${userEntity}">
-    <label for="name">Ім'я:</label>
-    <input type="text" id="name" name="name" th:field="*{username}"/>
+    <label for="username">Ім'я:</label>
+    <input type="text" id="username" name="username" th:field="*{username}"/>
     <br><br>
     <label for="email">Email:</label>
     <input type="text" id="email" name="email" th:field="*{email}"/>

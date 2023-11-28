@@ -138,7 +138,8 @@ public class TaskController {
 
         log.info("Task has been updated successfully");
 
-        return ResponseEntity.ok(taskDtoFactory.makeTaskDto(taskEntity));
+        TaskDto updatedTaskDto = taskDtoFactory.makeTaskDto(taskEntity);
+        return ResponseEntity.ok(updatedTaskDto);
     }
 
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
