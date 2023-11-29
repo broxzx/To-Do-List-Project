@@ -1,5 +1,5 @@
 insert into user_entity values (
-    1, 'test@gmail.com', '$2a$10$3rHtBb6evmxvzwdvuQdEl.9PwDPkfJbT55D7/SX27wFhxsMx1EZk2', 'ADMIN', 'test'
+    1, 'test@gmail.com', '$2a$10$3rHtBb6evmxvzwdvuQdEl.9PwDPkfJbT55D7/SX27wFhxsMx1EZk2', 'USER', 'test'
 );
 
 insert into user_entity values (

@@ -10,6 +10,7 @@ import java.util.List;
 @Getter
 @Setter
 @AllArgsConstructor
+@ToString
 @Builder
 public class UserEntity {
     @Id
@@ -37,18 +38,5 @@ public class UserEntity {
 
     public UserEntity() {
         this.role = Role.USER;
-    }
-
-    @Override
-    public String toString() {
-        return "UserEntity{" +
-                "id=" + id +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", email='" + email + '\'' +
-                ", role=" + role +
-                ", createdTasks=" + createdTasks +
-                ", createdTaskLists=" + createdTaskLists +
-                '}';
     }
 }

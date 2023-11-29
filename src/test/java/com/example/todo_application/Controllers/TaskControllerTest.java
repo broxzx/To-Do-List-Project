@@ -15,6 +15,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -58,6 +60,9 @@ public class TaskControllerTest {
 
         when(controllerHelper.getTaskListOrThrowException(taskId)).thenReturn(taskList);
         when(taskDtoFactory.makeTaskDto(any())).thenReturn(new TaskDto());
+
+        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken("dummyUsername", "dummyPassword");
+        SecurityContextHolder.getContext().setAuthentication(authentication);
 
         List<TaskDto> result = taskController.getAllTasks(taskId);
 

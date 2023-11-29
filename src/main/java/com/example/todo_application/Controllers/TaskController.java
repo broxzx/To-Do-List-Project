@@ -4,10 +4,7 @@ import com.example.todo_application.Controllers.helper.ControllerHelper;
 import com.example.todo_application.Entity.TaskEntity;
 import com.example.todo_application.Entity.TaskListEntity;
 import com.example.todo_application.Entity.UserEntity;
-import com.example.todo_application.Exception.BadRequestException;
-import com.example.todo_application.Exception.TaskListNotFound;
-import com.example.todo_application.Exception.TaskNotFoundException;
-import com.example.todo_application.Exception.TaskWithRecourseExists;
+import com.example.todo_application.Exception.*;
 import com.example.todo_application.Factory.TaskDtoFactory;
 import com.example.todo_application.Repository.TaskRepository;
 import com.example.todo_application.dto.TaskDto;
@@ -17,12 +14,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PostFilter;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -34,8 +33,11 @@ import java.util.stream.Collectors;
 public class TaskController {
 
     private final TaskRepository taskRepository;
+
     private final ControllerHelper controllerHelper;
+
     private final TaskDtoFactory taskDtoFactory;
+
     private final UserService userService;
 
     private static final String GET_ALL_TASKS = "/api/{taskId}/task/";
@@ -44,9 +46,17 @@ public class TaskController {
     private static final String UPDATE_TASK = "/api/{taskListId}/task/{taskId}";
     private static final String DELETE_TASK = "/api/task/{taskId}";
 
+    private String getCurrentUsersUserName() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        return authentication.getName();
+    }
+
     @PreAuthorize("isAuthenticated()")
+    @PostFilter("filterObject.createdBy == principal.username or hasRole('ADMIN')")
     @GetMapping(GET_ALL_TASKS)
     public List<TaskDto> getAllTasks(@PathVariable Long taskId) {
+        String currentUserName = getCurrentUsersUserName();
         TaskListEntity taskList = controllerHelper.getTaskListOrThrowException(taskId);
 
         if (taskList == null) {
@@ -56,6 +66,11 @@ public class TaskController {
         if (taskList.getTasks().isEmpty()) {
             throw new TaskListNotFound("Task list does not contain any tasks");
         }
+
+        if (!Objects.equals(currentUserName, taskList.getCreatedBy().getUsername())) {
+            throw new UserDoesNotHavePermission("This user does not have access to task with id %s".formatted(taskId));
+        }
+
 
         log.info("List Tasks have been obtained");
 
@@ -70,11 +85,16 @@ public class TaskController {
     @PreAuthorize("isAuthenticated()")
     @GetMapping(GET_TASK_BY_ID)
     public ResponseEntity<TaskDto> getTaskDtoById(@PathVariable Long taskListId, @PathVariable Long taskId) {
+        String currentUserName = getCurrentUsersUserName();
         TaskListEntity taskList = controllerHelper.getTaskListOrThrowException(taskListId);
+
+        if (!Objects.equals(currentUserName, taskList.getCreatedBy().getUsername())) {
+            throw new UserDoesNotHavePermission("This user does not have access to task with id %s".formatted(taskId));
+        }
 
         Optional<TaskEntity> task = taskList.getTasks()
                 .stream()
-                .filter(anotherTask -> anotherTask.getId().equals(taskId))
+                .filter(anotherTask -> anotherTask.getId().equals(taskId) && anotherTask.getCreatedBy().getUsername().equals(currentUserName))
                 .findFirst();
 
         log.info("Task with id {} was obtained", taskId);
@@ -92,10 +112,14 @@ public class TaskController {
     @PreAuthorize("isAuthenticated()")
     @PostMapping(CREATE_TASK)
     public ResponseEntity<String> createTask(@PathVariable Long taskListId, @RequestBody TaskEntity task) {
+        String currentUserName = getCurrentUsersUserName();
         TaskListEntity taskList = controllerHelper.getTaskListOrThrowException(taskListId);
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        UserEntity currentUserEntity = userService.findByUsername(authentication.getName());
+        if (!Objects.equals(currentUserName, taskList.getCreatedBy().getUsername())) {
+            throw new UserDoesNotHavePermission("This user does not have access to task with id %s".formatted(task.getId()));
+        }
+
+        UserEntity currentUserEntity = userService.findByUsername(currentUserName);
         task.setCreatedBy(currentUserEntity);
 
         boolean titleExists = taskList.getTasks()
@@ -126,7 +150,12 @@ public class TaskController {
             throw new BadRequestException("Task title cannot be empty");
         }
 
+        String currentUserName = getCurrentUsersUserName();
         TaskListEntity taskList = controllerHelper.getTaskListOrThrowException(taskListId);
+
+        if (!Objects.equals(currentUserName, taskList.getCreatedBy().getUsername())) {
+            throw new UserDoesNotHavePermission("This user does not have access to task with id %s".formatted(task.getId()));
+        }
 
         TaskEntity taskEntity = taskList
                 .getTasks()
@@ -144,7 +173,7 @@ public class TaskController {
         taskEntity.setIsDone(task.getIsDone());
 
         taskList.updateTaskToTaskList(taskEntity);
-        taskRepository.saveAndFlush(taskEntity);
+        taskRepository.save(taskEntity);
 
         log.info("Task has been updated successfully");
 
@@ -155,9 +184,13 @@ public class TaskController {
     @PreAuthorize("isAuthenticated()")
     @DeleteMapping(DELETE_TASK)
     public void deleteTask(@PathVariable Long taskId) {
-        boolean exists = taskRepository.existsById(taskId);
+        Optional<TaskEntity> requestedTaskEntity = taskRepository.findById(taskId);
+        String currentUserName = getCurrentUsersUserName();
 
-        if (exists) {
+        if (requestedTaskEntity.isPresent()) {
+            if (!requestedTaskEntity.get().getCreatedBy().getUsername().equals(currentUserName)) {
+                throw new UserDoesNotHavePermission("User does not have permission to delete task with id %s".formatted(taskId));
+            }
             taskRepository.deleteById(taskId);
             log.info(String.format("Task with id %s was deleted successfully", taskId));
         } else {

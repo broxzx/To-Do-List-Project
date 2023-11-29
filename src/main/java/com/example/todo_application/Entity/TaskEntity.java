@@ -12,6 +12,7 @@ import java.time.Instant;
 @NoArgsConstructor
 @Getter
 @Setter
+@ToString
 @Builder
 public class TaskEntity {
     @Id
@@ -37,16 +38,4 @@ public class TaskEntity {
     @JoinColumn(name = "created_by")
     private UserEntity createdBy;
 
-    @Override
-    public String toString() {
-        return "TaskEntity{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", description='" + description + '\'' +
-                ", dueDate=" + dueDate +
-                ", isDone=" + isDone +
-                ", taskListEntity=" + taskListEntity +
-                ", createdBy=" + createdBy +
-                '}';
-    }
 }
