@@ -2,9 +2,11 @@ package com.example.todo_application.Controllers.helper;
 
 import com.example.todo_application.Entity.UserEntity;
 import com.example.todo_application.service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,9 +28,13 @@ public class SecurityController {
     }
 
     @PostMapping("/registration")
-    public String registration(@ModelAttribute("userEntity") UserEntity userEntity, Model model) {
+    public String registration(@ModelAttribute("userEntity") @Valid UserEntity userEntity, Model model, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return "registration";
+        }
+
         userService.saveUser(userEntity);
 
-        return "redirect:/login";
+        return"redirect:/login";
     }
 }

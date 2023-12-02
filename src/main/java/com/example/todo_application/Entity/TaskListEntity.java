@@ -1,6 +1,7 @@
 package com.example.todo_application.Entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 import java.util.List;
@@ -19,6 +20,7 @@ public class TaskListEntity {
     private Long id;
 
     @Column(unique = true, nullable = false)
+    @NotBlank(message = "Name cannot be empty")
     private String name;
 
     @OneToMany(mappedBy = "taskListEntity", cascade = CascadeType.REMOVE)

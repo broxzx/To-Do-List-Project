@@ -10,6 +10,7 @@ import com.example.todo_application.Repository.TaskRepository;
 import com.example.todo_application.dto.TaskDto;
 import com.example.todo_application.service.UserService;
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -111,7 +112,7 @@ public class TaskController {
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping(CREATE_TASK)
-    public ResponseEntity<String> createTask(@PathVariable Long taskListId, @RequestBody TaskEntity task) {
+    public ResponseEntity<String> createTask(@PathVariable Long taskListId, @RequestBody @Valid TaskEntity task) {
         String currentUserName = getCurrentUsersUserName();
         TaskListEntity taskList = controllerHelper.getTaskListOrThrowException(taskListId);
 
@@ -144,7 +145,7 @@ public class TaskController {
 
     @PreAuthorize("isAuthenticated()")
     @PutMapping(UPDATE_TASK)
-    public ResponseEntity<TaskDto> updateTask(@PathVariable Long taskListId, @PathVariable Long taskId, @RequestBody TaskEntity task) {
+    public ResponseEntity<TaskDto> updateTask(@PathVariable Long taskListId, @PathVariable Long taskId, @RequestBody @Valid TaskEntity task) {
         if (task.getTitle().trim().isEmpty()) {
             log.error("Task title cannot be empty");
             throw new BadRequestException("Task title cannot be empty");

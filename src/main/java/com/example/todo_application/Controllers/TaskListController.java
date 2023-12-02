@@ -9,6 +9,7 @@ import com.example.todo_application.Repository.TaskListRepository;
 import com.example.todo_application.dto.TaskListDto;
 import com.example.todo_application.service.UserService;
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -80,7 +81,7 @@ public class TaskListController {
 
     @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
     @PostMapping(CREATE_TASK_LIST)
-    public ResponseEntity<String> createTaskList(@RequestBody TaskListEntity taskList) {
+    public ResponseEntity<String> createTaskList(@Valid @RequestBody TaskListEntity taskList) {
         String currentUserName = getCurrentUsersUserName();
 
         List<TaskListEntity> foundTaskListEntities = taskListRepository.findTaskListEntitiesByCreatedBy_Username(currentUserName);
@@ -106,7 +107,7 @@ public class TaskListController {
 
     @PreAuthorize("isAuthenticated()")
     @PutMapping(UPDATE_TASK_LIST_BY_ID)
-    public ResponseEntity<TaskListDto> updateTaskList(@PathVariable Long id, @RequestBody TaskListEntity taskList) {
+    public ResponseEntity<TaskListDto> updateTaskList(@PathVariable Long id, @RequestBody @Valid TaskListEntity taskList) {
         String currentUserName = getCurrentUsersUserName();
 
         TaskListEntity findTaskListEntity = taskListRepository.findByIdAndCreatedBy_Username(id, currentUserName)

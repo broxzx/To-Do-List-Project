@@ -2,6 +2,7 @@ package com.example.todo_application.Entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 import java.time.Instant;
@@ -20,8 +21,10 @@ public class TaskEntity {
     private Long id;
 
     @Column(unique = true, nullable = false)
+    @NotBlank(message = "Title cannot be empty")
     private String title;
 
+    @NotBlank(message = "Description cannot be empty")
     private String description;
 
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "UTC")
