@@ -1,5 +1,17 @@
-version: '3'
+version: '3.8'
+
 services:
+  todoapplication:
+    image: todo
+    depends_on:
+      - postgres
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/ToDoList
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: root
+
   postgres:
     image: postgres:latest
     environment:
@@ -8,16 +20,3 @@ services:
       POSTGRES_PASSWORD: root
     ports:
       - "5432:5432"
-
-  your-application:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    depends_on:
-      - postgres
-    ports:
-      - "8080:8080"
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/ToDoList
-      SPRING_DATASOURCE_USERNAME: postgres
-      SPRING_DATASOURCE_PASSWORD: root

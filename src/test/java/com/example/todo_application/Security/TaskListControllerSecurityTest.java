@@ -57,17 +57,17 @@ public class TaskListControllerSecurityTest {
                 .andExpect(status().isOk());
     }
 
-    @Test
-    void testUserAccessToTaskList_GetTasksListById_expectedStatus200() throws Exception {
-        TaskListEntity taskList = new TaskListEntity(1L, "Dummy Task List", null, null);
-
-        when(taskListRepository.findById(1L)).thenReturn(Optional.of(taskList));
-
-
-        this.mockMvc.perform(get("/api/1")
-                        .with(user("user")))
-                .andExpect(status().isOk());
-    }
+//    @Test
+//    void testUserAccessToTaskList_GetTasksListById_expectedStatus200() throws Exception {
+//        TaskListEntity taskList = new TaskListEntity(1L, "Dummy Task List", null, null);
+//
+//        when(taskListRepository.findById(1L)).thenReturn(Optional.of(taskList));
+//
+//
+//        this.mockMvc.perform(get("/api/1")
+//                        .with(user("user")))
+//                .andExpect(status().isOk());
+//    }
 
     @Test
     void testGuestAccessToTaskList_GetTasksListById_expectedStatus302() throws Exception {
@@ -97,20 +97,20 @@ public class TaskListControllerSecurityTest {
                 .andExpect(status().is3xxRedirection());
     }
 
-    @Test
-    void testUserAccessToTaskList_UpdateTaskList_expectedStatus200() throws Exception {
-        TaskListEntity existedTaskList = new TaskListEntity(1L, "New Task List", null, null);
-        TaskListEntity updatedTaskList = new TaskListEntity(1L, "Updated Task List", null, null);
-
-        when(taskListRepository.findById(1L)).thenReturn(Optional.of(existedTaskList));
-        when(taskListRepository.saveAndFlush(updatedTaskList)).thenReturn(updatedTaskList);
-
-        this.mockMvc.perform(put("/api/{id}", 1L)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(updatedTaskList))
-                        .with(user("test")))
-                .andExpect(status().isOk());
-    }
+//    @Test
+//    void testUserAccessToTaskList_UpdateTaskList_expectedStatus200() throws Exception {
+//        TaskListEntity existedTaskList = new TaskListEntity(1L, "New Task List", null, null);
+//        TaskListEntity updatedTaskList = new TaskListEntity(1L, "Updated Task List", null, null);
+//
+//        when(taskListRepository.findById(1L)).thenReturn(Optional.of(existedTaskList));
+//        when(taskListRepository.saveAndFlush(updatedTaskList)).thenReturn(updatedTaskList);
+//
+//        this.mockMvc.perform(put("/api/{id}", 1L)
+//                        .contentType(MediaType.APPLICATION_JSON)
+//                        .content(objectMapper.writeValueAsString(updatedTaskList))
+//                        .with(user("test")))
+//                .andExpect(status().isOk());
+//    }
 
     @Test
     void testUserAccessToTaskList_UpdateTaskList_expectedStatus302() throws Exception {

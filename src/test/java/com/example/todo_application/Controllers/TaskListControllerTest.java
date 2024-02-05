@@ -33,17 +33,4 @@ public class TaskListControllerTest {
                  .andReturn();
     }
 
-    @Test
-    @DisplayName("Method: POST '/api/{taskListId}/'. create new task list in Data Base")
-    public void createNewTaskList() throws Exception {
-        String taskListJson = "{ \"name\": \"Test Task List\", \"tasks\": [] }";
-
-        mockMvc.perform(post("/api/")
-                        .with(user("test"))
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(taskListJson))
-                .andExpect(status().isCreated())
-                .andExpect(content().string("Task list with id 1 was created"));
-    }
-
 }

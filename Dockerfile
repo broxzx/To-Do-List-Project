@@ -1,9 +1,9 @@
-FROM adoptopenjdk/openjdk11:alpine-slim
-
-RUN mkdir /app
-
-COPY target/ToDo_Application-0.0.1-SNAPSHOT.jar /app/ToDo_Application-0.0.1-SNAPSHOT.jar
+FROM openjdk:17-jdk
 
 WORKDIR /app
 
-CMD ["java", "-jar", "your-application.jar"]
+COPY target/ToDo_Application-0.0.1-SNAPSHOT.jar /app/ToDo_Application-0.0.1-SNAPSHOT.jar
+
+EXPOSE 8080
+
+CMD ["java", "-jar", "ToDo_Application-0.0.1-SNAPSHOT.jar"]
