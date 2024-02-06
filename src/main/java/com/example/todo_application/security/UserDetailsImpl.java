@@ -1,6 +1,6 @@
 package com.example.todo_application.security;
 
-import com.example.todo_application.Entity.UserEntity;
+import com.example.todo_application.entity.UserEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

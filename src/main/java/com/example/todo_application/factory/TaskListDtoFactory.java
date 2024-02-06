@@ -1,6 +1,6 @@
-package com.example.todo_application.Factory;
+package com.example.todo_application.factory;
 
-import com.example.todo_application.Entity.TaskListEntity;
+import com.example.todo_application.entity.TaskListEntity;
 import com.example.todo_application.dto.TaskListDto;
 import org.springframework.stereotype.Component;
 

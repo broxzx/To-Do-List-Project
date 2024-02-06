@@ -1,8 +1,8 @@
-package com.example.todo_application.Controllers.helper;
+package com.example.todo_application.controllers.helper;
 
-import com.example.todo_application.Entity.TaskListEntity;
-import com.example.todo_application.Exception.TaskListNotFound;
-import com.example.todo_application.Repository.TaskListRepository;
+import com.example.todo_application.entity.TaskListEntity;
+import com.example.todo_application.exception.TaskListNotFound;
+import com.example.todo_application.repository.TaskListRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

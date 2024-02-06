@@ -1,4 +1,4 @@
-package com.example.todo_application.Entity;
+package com.example.todo_application.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;

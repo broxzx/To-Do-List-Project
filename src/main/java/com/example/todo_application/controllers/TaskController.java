@@ -1,12 +1,12 @@
-package com.example.todo_application.Controllers;
+package com.example.todo_application.controllers;
 
-import com.example.todo_application.Controllers.helper.ControllerHelper;
-import com.example.todo_application.Entity.TaskEntity;
-import com.example.todo_application.Entity.TaskListEntity;
-import com.example.todo_application.Entity.UserEntity;
-import com.example.todo_application.Exception.*;
-import com.example.todo_application.Factory.TaskDtoFactory;
-import com.example.todo_application.Repository.TaskRepository;
+import com.example.todo_application.controllers.helper.ControllerHelper;
+import com.example.todo_application.entity.TaskEntity;
+import com.example.todo_application.entity.TaskListEntity;
+import com.example.todo_application.entity.UserEntity;
+import com.example.todo_application.exception.*;
+import com.example.todo_application.factory.TaskDtoFactory;
+import com.example.todo_application.repository.TaskRepository;
 import com.example.todo_application.dto.TaskDto;
 import com.example.todo_application.service.UserService;
 import jakarta.transaction.Transactional;

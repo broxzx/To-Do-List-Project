@@ -1,9 +1,8 @@
 package com.example.todo_application.service;
 
-import com.example.todo_application.Entity.UserEntity;
-import com.example.todo_application.Exception.UserNotFoundException;
-import com.example.todo_application.Repository.UserRepository;
-import lombok.RequiredArgsConstructor;
+import com.example.todo_application.entity.UserEntity;
+import com.example.todo_application.exception.UserNotFoundException;
+import com.example.todo_application.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -23,9 +22,9 @@ public class UserService {
         this.encoder = encoder;
     }
 
-    public void saveUser(UserEntity user) {
+    public UserEntity saveUser(UserEntity user) {
         user.setPassword(encoder.encode(user.getPassword()));
-        userRepository.save(user);
+        return userRepository.save(user);
     }
 
     public UserEntity findByUsername(String username) {

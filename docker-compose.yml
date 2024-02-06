@@ -2,7 +2,11 @@ version: '3.8'
 
 services:
   todoapplication:
-    image: todo
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - CACHEBUST=${BUILD_DATE} # temporary
     depends_on:
       - postgres
     ports:

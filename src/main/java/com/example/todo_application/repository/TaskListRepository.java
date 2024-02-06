@@ -1,6 +1,6 @@
-package com.example.todo_application.Repository;
+package com.example.todo_application.repository;
 
-import com.example.todo_application.Entity.TaskListEntity;
+import com.example.todo_application.entity.TaskListEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

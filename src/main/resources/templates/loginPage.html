@@ -1,14 +1,61 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
 <head>
-    <title>Please Log In</title>
+    <title>Login Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            text-align: center;
+            margin: 50px;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        form {
+            max-width: 300px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        div {
+            margin-bottom: 10px;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            box-sizing: border-box;
+        }
+
+        input[type="submit"] {
+            background-color: #4caf50;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        a {
+            color: #007bff;
+            text-decoration: none;
+        }
+    </style>
 </head>
 <body>
-<h1>Please Log In</h1>
-<div th:if="${param.error}">
+<h1>Login</h1>
+<div th:if="${param.error}" style="color: #ff5555;">
     Invalid username and password.
 </div>
-<div th:if="${param.logout}">
+<div th:if="${param.logout}" style="color: #4caf50;">
     You have been logged out.
 </div>
 <form th:action="@{/login}" method="post">
@@ -20,6 +67,6 @@
     </div>
     <input type="submit" value="Log in"/>
 </form>
-<a href="/registration">Registration</a>
+<a th:href="@{/registration}" style="display: block; margin-top: 10px;">Registration</a>
 </body>
 </html>

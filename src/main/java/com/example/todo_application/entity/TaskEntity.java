@@ -1,4 +1,4 @@
-package com.example.todo_application.Entity;
+package com.example.todo_application.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;

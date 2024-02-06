@@ -1,6 +1,6 @@
-package com.example.todo_application.Controllers.helper;
+package com.example.todo_application.controllers.helper;
 
-import com.example.todo_application.Entity.UserEntity;
+import com.example.todo_application.entity.UserEntity;
 import com.example.todo_application.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

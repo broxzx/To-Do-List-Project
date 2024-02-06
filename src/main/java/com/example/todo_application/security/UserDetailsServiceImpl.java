@@ -1,8 +1,8 @@
 package com.example.todo_application.security;
 
-import com.example.todo_application.Entity.UserEntity;
-import com.example.todo_application.Exception.UserNotFoundException;
-import com.example.todo_application.Repository.UserRepository;
+import com.example.todo_application.entity.UserEntity;
+import com.example.todo_application.exception.UserNotFoundException;
+import com.example.todo_application.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;

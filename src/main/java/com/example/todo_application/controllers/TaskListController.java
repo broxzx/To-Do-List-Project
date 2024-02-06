@@ -1,11 +1,11 @@
-package com.example.todo_application.Controllers;
+package com.example.todo_application.controllers;
 
-import com.example.todo_application.Entity.TaskListEntity;
-import com.example.todo_application.Entity.UserEntity;
-import com.example.todo_application.Exception.TaskListNotFound;
-import com.example.todo_application.Exception.TaskListWithRecourseExists;
-import com.example.todo_application.Factory.TaskListDtoFactory;
-import com.example.todo_application.Repository.TaskListRepository;
+import com.example.todo_application.entity.TaskListEntity;
+import com.example.todo_application.entity.UserEntity;
+import com.example.todo_application.exception.TaskListNotFound;
+import com.example.todo_application.exception.TaskListWithRecourseExists;
+import com.example.todo_application.factory.TaskListDtoFactory;
+import com.example.todo_application.repository.TaskListRepository;
 import com.example.todo_application.dto.TaskListDto;
 import com.example.todo_application.service.UserService;
 import jakarta.transaction.Transactional;

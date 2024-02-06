@@ -1,4 +1,4 @@
-package com.example.todo_application.Entity;
+package com.example.todo_application.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -12,6 +12,7 @@ import java.util.List;
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 @ToString
 @Builder
 public class UserEntity {
@@ -41,7 +42,12 @@ public class UserEntity {
     private List<TaskListEntity> createdTaskLists;
 
 
-    public UserEntity() {
+//    public UserEntity() {
+//        this.role = Role.USER;
+//    }
+
+    @PrePersist
+    public void init() {
         this.role = Role.USER;
     }
 }
